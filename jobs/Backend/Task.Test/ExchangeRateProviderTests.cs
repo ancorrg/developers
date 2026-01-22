@@ -6,6 +6,7 @@
     using ExchangeRateUpdater.Models;
     using ExchangeRateUpdater.Parsers;
     using FluentAssertions;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Moq;
     using System;
     using System.Collections.Generic;
@@ -33,7 +34,7 @@
             mockClient.Setup(c => c.GetDailyRatesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(rawData);
 
-            var provider = new ExchangeRateProvider(mockClient.Object, parser);
+            var provider = new ExchangeRateProvider(mockClient.Object, parser, NullLogger<ExchangeRateProvider>.Instance);
 
             var result = (await provider.GetExchangeRatesAsync(currencies)).ToList();
 
@@ -46,7 +47,7 @@
         {
             var mockClient = new Mock<IExchangeRateClient>();
             var mockParser = new Mock<IExchangeRateDataParser>();
-            var provider = new ExchangeRateProvider(mockClient.Object, mockParser.Object);
+            var provider = new ExchangeRateProvider(mockClient.Object, mockParser.Object, NullLogger<ExchangeRateProvider>.Instance);
 
             var act = async () => await provider.GetExchangeRatesAsync(null);
 
@@ -58,7 +59,7 @@
         {
             var mockClient = new Mock<IExchangeRateClient>();
             var mockParser = new Mock<IExchangeRateDataParser>();
-            var provider = new ExchangeRateProvider(mockClient.Object, mockParser.Object);
+            var provider = new ExchangeRateProvider(mockClient.Object, mockParser.Object, NullLogger<ExchangeRateProvider>.Instance);
 
             var result = await provider.GetExchangeRatesAsync(Array.Empty<Currency>());
 
@@ -72,7 +73,7 @@
         {
             var mockClient = new Mock<IExchangeRateClient>();
             var mockParser = new Mock<IExchangeRateDataParser>();
-            var provider = new ExchangeRateProvider(mockClient.Object, mockParser.Object);
+            var provider = new ExchangeRateProvider(mockClient.Object, mockParser.Object, NullLogger<ExchangeRateProvider>.Instance);
 
             mockClient.Setup(c => c.GetDailyRatesAsync(It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ExchangeRateUpdateException("remote error"));

@@ -4,6 +4,7 @@ namespace ExchangeReaderUpdater.Test
     using ExchangeRateUpdater.ExchangeClients;
     using ExchangeRateUpdater.Settings;
     using FluentAssertions;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Microsoft.Extensions.Options;
     using Moq;
     using Moq.Protected;
@@ -37,7 +38,7 @@ namespace ExchangeReaderUpdater.Test
             var optionsMock = new Mock<IOptions<ExchangeRateProviderSettings>>();
             optionsMock.SetupGet(o => o.Value).Returns(new ExchangeRateProviderSettings { CnbUrl = "http://test" });
 
-            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object);
+            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object, NullLogger<CnbExchangeRateClient>.Instance);
 
             var result = await client.GetDailyRatesAsync(CancellationToken.None);
 
@@ -71,7 +72,7 @@ namespace ExchangeReaderUpdater.Test
             var optionsMock = new Mock<IOptions<ExchangeRateProviderSettings>>();
             optionsMock.SetupGet(o => o.Value).Returns(new ExchangeRateProviderSettings { CnbUrl = "http://test" });
 
-            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object);
+            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object, NullLogger<CnbExchangeRateClient>.Instance);
 
             Func<Task> act = async () => await client.GetDailyRatesAsync(CancellationToken.None);
 
@@ -96,7 +97,7 @@ namespace ExchangeReaderUpdater.Test
             var optionsMock = new Mock<IOptions<ExchangeRateProviderSettings>>();
             optionsMock.SetupGet(o => o.Value).Returns(new ExchangeRateProviderSettings { CnbUrl = "http://test" });
 
-            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object);
+            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object, NullLogger<CnbExchangeRateClient>.Instance);
 
             Func<Task> act = async () => await client.GetDailyRatesAsync(CancellationToken.None);
 
@@ -121,7 +122,7 @@ namespace ExchangeReaderUpdater.Test
             var optionsMock = new Mock<IOptions<ExchangeRateProviderSettings>>();
             optionsMock.SetupGet(o => o.Value).Returns(new ExchangeRateProviderSettings { CnbUrl = "http://test" });
 
-            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object);
+            var client = new CnbExchangeRateClient(httpClient, optionsMock.Object, NullLogger<CnbExchangeRateClient>.Instance);
 
             Func<Task> act = async () => await client.GetDailyRatesAsync(new CancellationToken(true));
 
